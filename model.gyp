@@ -2,12 +2,13 @@ import tensorflow as tf
 import numpy as np
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D, Conv2DTranspose, concatenate
 from keras.models import Model
+from keras.optimizers import adam
 
 
 def unet():
     #Encoding
-    input = Input(shape = (256,256,1))
-    conv1_1 = Conv2D(64, (3,3), strides = 1, activation = 'relu', padding = 'same')(input)
+    inputs = Input(shape = (256,256,1))
+    conv1_1 = Conv2D(64, (3,3), strides = 1, activation = 'relu', padding = 'same')(inputs)
     conv1_2 = Conv2D(64, (3,3), strides = 1, activation = 'relu', padding = 'same')(conv1_1)
     pool1 = MaxPooling2D(pool_size = (2,2))(conv1_2)
     conv2_1 = Conv2D(128, (3,3), strides = 1, activation = 'relu', padding = 'same')(pool1)
@@ -40,8 +41,9 @@ def unet():
     convtrans4_2 = Conv2DTranspose(64, (3,3), strides = 1, padding = 'same', activation = 'relu')(convtrans4_1)
     convtrans4_3 = Conv2DTranspose(2, (1,1), strides = 1, padding = 'same', activation = 'relu')(convtrans4_2)
 
-    model = tf.keras.Model(input = input, output = convtrans4_3)
-    model.compile(optimizer = tf.keras.optimizers.Adam(lr = 1e-4), loss = 'binary_crossentropy', metrics = ['accuracy'])
+    model = Model(input = inputs, output = convtrans4_3)
+    model.compile(optimizer = adam(lr = 1e-4), loss = 'binary_crossentropy', metrics = ['accuracy'])
     return model
 
+model = unet()
 print(model.summary())
