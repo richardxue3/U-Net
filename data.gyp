@@ -67,24 +67,11 @@ def labelVisualize(img):
 
 def saveResult(save_path,npyfile):
     for i,item in enumerate(npyfile):
-        img = labelVisualize(item) if flag_multi_class else item[:,:,0]
+        img = labelVisualize(item)
         io.imsave(os.path.join(save_path,"%d_predict.png"%i),img)
 
         
-data_gen_args = dict(rotation_range=0.2,
-                    width_shift_range=0.05,
-                    height_shift_range=0.05,
-                    shear_range=0.05,
-                    zoom_range=0.05,
-                    horizontal_flip=True,
-                    fill_mode='nearest')
 
-    
-gen = trainGenerator(1,'data/membrane/train','image','label',aug_dict=data_gen_args, save_to_dir='data/membrane/traingenerator')
-for (img,mask) in gen:
-    plt.imshow(img[0,:,:,0])
-    plt.imshow(mask[0,:,:,0])
-    plt.show()
 
 
 
