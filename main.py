@@ -19,5 +19,8 @@ data_gen_args = dict(rotation_range=0.2,
 
     
 trainingSet = trainGenerator(1,'data/membrane/train','image','label',aug_dict=data_gen_args, save_to_dir='data/membrane/traingenerator')
+testingSet = testGenerator('data/membrane/test')
 model = unet()
-model.fit(trainingSet, steps_per_epoch = 300, epochs = 1)
+model.fit(trainingSet, steps_per_epoch = 500, epochs = 1)
+results = model.predict_generator(testingSet,30,verbose=1)
+saveResult("data/membrane/test",results)
