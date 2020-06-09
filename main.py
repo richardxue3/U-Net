@@ -6,6 +6,7 @@ import glob
 import skimage.io as io
 import skimage.transform as trans
 import matplotlib.pyplot as plt
+from keras.models import load_model
 from data import *
 from model import *
 
@@ -22,5 +23,12 @@ trainingSet = trainGenerator(1,'data/membrane/train','image','label',aug_dict=da
 testingSet = testGenerator('data/membrane/test')
 model = unet()
 model.fit(trainingSet, steps_per_epoch = 500, epochs = 1)
+results = model.predict_generator(testingSet,30,verbose=1)
+saveResult("data/membrane/test",results)
+
+model.save('unet_model.h5')
+del model
+model = load_model('unet_model.h5')
+testingSet = testGenerator('data/membrane/test')
 results = model.predict_generator(testingSet,30,verbose=1)
 saveResult("data/membrane/test",results)

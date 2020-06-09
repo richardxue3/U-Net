@@ -67,7 +67,7 @@ def labelVisualize(img):
 
 def saveResult(save_path,npyfile):
     for i,item in enumerate(npyfile):
-        img = labelVisualize(item)
+        img = item[:,:,0]
         io.imsave(os.path.join(save_path,"%d_predict.png"%i),img)
 
         
